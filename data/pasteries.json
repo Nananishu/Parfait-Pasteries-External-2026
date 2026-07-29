@@ -1,0 +1,32 @@
+{
+    "Blueberry Slice": {
+        "price": 7.50,
+        "tags": ["Halal", "Vegetarian"],
+        "desc": "A soft, fluffy vanilla sponge layered with fresh blueberry dessert set... sweet and perfectly balanced!",
+        "image": "blueberry.png"
+    },
+    "Choco Dream": {
+        "price": 7.50,
+        "tags": ["Halal", "Gluten-Free (Oats)"],
+        "desc": "Rich, chocolate-dipped biscuit with a creamy filling that melts in your mouth...",
+        "image": "choco.png"
+    },
+    "Strawberry Delight": {
+        "price": 8.00,
+        "tags": ["Halal", "Contains Dairy"],
+        "desc": "A light and airy Japanese sponge cake layered with sweet whipped cream and fresh slices...",
+        "image": "strawberry.png"
+    },
+    "Peony Dream": {
+        "price": 5.00,
+        "tags": ["Halal", "Nut-Free"],
+        "desc": "A delicate pink almond macaron shell filled with a smooth strawberry frosting...",
+        "image": "peony.png"
+    },
+    "Midsummer Magic": {
+        "price": 12.50,
+        "tags": ["Halal", "Vegetarian"],
+        "desc": "Soft Japanese milk bread (Shokupan) packed with sweet chantilly cream and vibrant slices...",
+        "image": "midsummer.png"
+    }
+}

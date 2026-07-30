@@ -1,6 +1,6 @@
 {
     "Custard Pudding parfait": {
-        "price": 7.50,
+        "price": 9.50,
         "tags": ["Vegetarian", "Contains Dairy"],
         "desc": "A delightful glass parfait layered with sweet cream and fresh fruit, crowned with a rich baked custard flan, whipped cream, and a cherry. Sweet, creamy, and visually stunning!",
         "image": "custard.jpg"
@@ -18,13 +18,13 @@
         "image": "straw.jpg"
     },
     "Fruity Dream": {
-        "price": 5.00,
+        "price": 8.00,
         "tags": ["Vegetarian", "Nut-Free", "Contains Dairy"],
         "desc": "A light, airy vanilla sponge cake layered with fluffy whipped cream and a colorful medley of fresh seasonal fruits, including banana, grapes, and citrus. Bright, refreshing, and perfectly sweet!",
         "image": "fruity.jpg"
     },
     "Midsummer Matcha Magic": {
-        "price": 12.50,
+        "price": 10.50,
         "tags": [ "Vegetarian", "Contains Dairy"],
         "desc": "Vibrant matcha green tea sponge layered with a sweet, pastel pink berry cream, coated in smooth matcha frosting and topped with a cherry. Earthy, sweet, and perfectly balanced!",
         "image": "matchacake.jpg"

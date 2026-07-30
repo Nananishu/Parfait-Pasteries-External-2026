@@ -1,8 +1,88 @@
-{
-    "Tulip Bouquet": {"price": 25.50},
-    "Peony Bouquet": {"price": 45.15},
-    "Glorious Bouquet": {"price": 40.50},
-    "Strawberry matcha": {"price": 9.50},
-    "Taro Creamtea": {"price": 9.50},
-    "Lychee boba tea": {"price": 8.50}
-}
+{% extends "base.html" %}
+{% block content %}
+<section class="page-shell">
+    <div class="page-box addons-box wavy-box">
+        <h2 class="cursive-title">Add-ons &amp; Extras</h2>
+
+        <div class="addons-grid">
+            <div class="addon-col">
+                <img class="addon-rect-image" src="{{ url_for('static', filename='images/drinks.jpg') }}" alt="Drinks add-ons">
+                <h3 class="cursive-subtitle">Drinks</h3>
+                {% for name, details in addons.items() %}
+                    {% if loop.index > 3 %}
+                    <form action="{{ url_for('add_to_cart') }}" method="post" class="addon-row">
+                        <input type="hidden" name="pastry" value="{{ name }}">
+                        <div class="addon-row-info">
+                            <span>{{ name }}</span>
+                            <strong>${{ "%.2f"|format(details.price) }}</strong>
+                        </div>
+                        <button type="submit" class="btn-primary addon-btn">Add</button>
+                    </form>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="addon-col">
+                <img class="addon-rect-image" src="{{ url_for('static', filename='images/flowers.jpg') }}" alt="Bouquet add-ons">
+                <h3 class="cursive-subtitle">Bouquets</h3>
+                {% for name, details in addons.items() %}
+                    {% if loop.index <= 3 %}
+                    <form action="{{ url_for('add_to_cart') }}" method="post" class="addon-row">
+                        <input type="hidden" name="pastry" value="{{ name }}">
+                        <div class="addon-row-info">
+                            <span>{{ name }}</span>
+                            <strong>${{ "%.2f"|format(details.price) }}</strong>
+                        </div>
+                        <button type="submit" class="btn-primary addon-btn">Add</button>
+                    </form>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="page-box summary-box wavy-box">
+        <h2 class="cursive-title">Order Summary</h2>
+
+        {% if cart %}
+        <ul class="summary-list">
+            {% for name, item in cart.items() %}
+            <li>
+                <div class="summary-left">
+                    <div class="mini-gingham-circle">
+                        <img src="{{ url_for('static', filename='images/' + pastries[name].image) }}" alt="{{ name }}">
+                    </div>
+                    <div class="summary-info">
+                        <strong>{{ name }}</strong>
+                        <span>Qty {{ item.quantity }}</span>
+                    </div>
+                </div>
+                <div class="summary-right">
+                    <div class="summary-price-stack">
+                        <span class="old-price">${{ "%.2f"|format(item.price * item.quantity) }}</span>
+                        <span class="new-price">${{ "%.2f"|format((item.price * item.quantity) * 0.5) }}</span>
+                    </div>
+                    <a href="{{ url_for('remove_from_cart', item=name) }}" class="remove-btn" aria-label="Remove {{ name }}">×</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>Your cart is empty.</p>
+        {% endif %}
+
+        <hr class="summary-divider">
+
+        <div class="totals">
+            <p><span>Subtotal</span><strong>${{ "%.2f"|format(total) }}</strong></p>
+            {% if discount_applied %}
+            <p class="discount-text">50% off applied</p>
+            {% endif %}
+            <div class="button-group">
+                <a href="{{ url_for('index') }}" class="btn-secondary">Back</a>
+                <a href="#" class="btn-primary">Checkout</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

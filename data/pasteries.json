@@ -6,19 +6,19 @@
         "image": "custard.jpg"
     },
     "Choco Dream": {
-        "price": 7.50,
+        "price": 9.50,
         "tags": ["Vegetarian", "Gluten-Free (Oats)"],
-        "desc": "Rich, chocolate-dipped biscuit with a creamy filling that melts in your mouth...",
+        "desc": "A tender chocolate cake layered with airy whipped cream and sweet, juicy strawberries, finished with a silky chocolate frosting and a fresh strawberry on top. Every slice feels a little special.",
         "image": "chocolatecake.jpg"
     },
     "Strawberry Delight": {
-        "price": 8.00,
+        "price": 9.00,
         "tags": ["Vegetarian", "Contains Dairy"],
         "desc": "Light and airy vanilla sponge cake layered with generous amounts of freshly whipped cream and juicy, ripe strawberries. A timeless, refreshing favorite!",
         "image": "straw.jpg"
     },
     "Fruity Dream": {
-        "price": 8.00,
+        "price": 10.00,
         "tags": ["Vegetarian", "Nut-Free", "Contains Dairy"],
         "desc": "A light, airy vanilla sponge cake layered with fluffy whipped cream and a colorful medley of fresh seasonal fruits, including banana, grapes, and citrus. Bright, refreshing, and perfectly sweet!",
         "image": "fruity.jpg"

@@ -1,6 +1,5 @@
 import json
 import sqlite3
-
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
@@ -39,6 +38,7 @@ def calculate_total(cart, selected_addons=None):
     if selected_addons:
         total += sum(selected_addons.values())
 
+    # Discount applied to all items as per the mockup
     discount_applied = total > 0
     if discount_applied:
         total *= 0.5
@@ -63,10 +63,42 @@ def index():
     )
 
 
+@app.route('/addons')
+def addons_page():
+    cart = session.get('cart', {})
+    selected_addons = session.get('selected_addons', {})
+    pastries, addons = load_data()
+    total, discount_applied = calculate_total(cart, selected_addons)
+    return render_template(
+        'addons.html',
+        pastries=pastries,
+        addons=addons,
+        cart=cart,
+        total=total,
+        selected_addons=selected_addons,
+        discount_applied=discount_applied,
+    )
+
+
+@app.route('/best-sellers')
+def best_sellers_page():
+    cart = session.get('cart', {})
+    pastries, addons = load_data()
+    total, discount_applied = calculate_total(cart, {})
+    return render_template(
+        'best_sellers.html',
+        pastries=pastries,
+        addons=addons,
+        cart=cart,
+        total=total,
+        discount_applied=discount_applied,
+    )
+
+
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
     pastry = request.form['pastry']
-    pastries, addons = load_data()
+    pastries, _ = load_data()
     cart = session.get('cart', {})
 
     if pastry in cart:
@@ -75,8 +107,9 @@ def add_to_cart():
         cart[pastry] = {'price': pastries[pastry]['price'], 'quantity': 1}
 
     session['cart'] = cart
+    session.modified = True
     flash(f'Added {pastry} to your cart! 🍰')
-    return redirect(url_for('index') + '#cart')
+    return redirect(url_for('addons_page'))
 
 
 @app.route('/remove_from_cart/<item>')
@@ -85,10 +118,10 @@ def remove_from_cart(item):
     if item in cart:
         del cart[item]
         session['cart'] = cart
-    return redirect(url_for('index') + '#cart')
+        session.modified = True
+    return redirect(url_for('addons_page'))
 
 
 if __name__ == '__main__':
     initialise_database()
     app.run(debug=True)
-    

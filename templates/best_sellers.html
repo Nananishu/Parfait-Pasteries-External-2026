@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="best-sellers-wrapper">
+    <div class="best-sellers-box">
+        <h2 class="cursive-title">Our Best Sellers</h2>
+        <p class="subtitle" style="font-weight:400; color:#888; font-size:12px;">Sample our best-selling desserts and leave us a review!</p>
+
+        <div class="pill-grid">
+            {% for name, details in pastries.items() %}
+            <div class="pill-card">
+                <div class="gingham-circle-small">
+                    <img src="{{ url_for('static', filename='images/' + details['image']) }}" alt="{{ name }}">
+                </div>
+                <h4 class="cursive-card-title">{{ name }}</h4>
+                <p class="price">${{ '%.2f' % details['price'] }} per slice</p>
+                <div class="tags">
+                    {% for tag in details['tags'] %}
+                        <span class="tag">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+                <p class="desc">{{ details['desc'] }}</p>
+
+                <div class="button-group">
+                    <button class="btn-secondary">View Recipe</button>
+                    <form action="{{ url_for('add_to_cart') }}" method="post" style="margin:0;">
+                        <input type="hidden" name="pastry" value="{{ name }}">
+                        <button type="submit" class="btn-primary">Add to cart</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -2,10 +2,12 @@ import json
 import sqlite3
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 
+# This starts the Flask app and gives it a secret key so the cart can be remembered in the session.
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 app.secret_key = 'parfait_pastries_secret'
 
 
+# This function creates the orders table if it does not already exist, so the app can save order data.
 def initialise_database():
     with sqlite3.connect('bakery.db') as conn:
         cursor = conn.cursor()
@@ -25,6 +27,7 @@ def initialise_database():
         conn.commit()
 
 
+# This loads the pastry and addon information from JSON files, which keeps the data easy to update.
 def load_data():
     with open('data/pasteries.json', encoding='utf-8') as file:
         pastries = json.load(file)
@@ -33,6 +36,7 @@ def load_data():
     return pastries, addons
 
 
+# This works out the total price and applies the 50% discount to make the checkout look like the mockup.
 def calculate_total(cart, selected_addons=None):
     total = sum(item['price'] * item['quantity'] for item in cart.values())
     if selected_addons:
@@ -46,6 +50,7 @@ def calculate_total(cart, selected_addons=None):
     return total, discount_applied
 
 
+# This route loads the homepage and sends the bakery data to the homepage template.
 @app.route('/')
 def index():
     cart = session.get('cart', {})
@@ -63,6 +68,7 @@ def index():
     )
 
 
+# This route loads the addons page, where the customer can see extra items and the order summary.
 @app.route('/addons')
 def addons_page():
     cart = session.get('cart', {})
@@ -80,6 +86,7 @@ def addons_page():
     )
 
 
+# This route loads the best sellers page and passes the same cart information through to the template.
 @app.route('/best-sellers')
 def best_sellers_page():
     cart = session.get('cart', {})
@@ -95,6 +102,7 @@ def best_sellers_page():
     )
 
 
+# This route receives the selected pastry from the form and adds it into the cart session.
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
     pastry = request.form['pastry']
@@ -112,6 +120,7 @@ def add_to_cart():
     return redirect(url_for('addons_page'))
 
 
+# This route removes an item from the cart when the user clicks the delete button.
 @app.route('/remove_from_cart/<item>')
 def remove_from_cart(item):
     cart = session.get('cart', {})

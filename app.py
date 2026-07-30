@@ -1,6 +1,12 @@
 import json
 import sqlite3
+from pathlib import Path
+
 from flask import Flask, flash, redirect, render_template, request, session, url_for
+
+BASE_DIR = Path(__file__).resolve().parent
+DB_PATH = BASE_DIR / 'bakery.db'
+DATA_DIR = BASE_DIR / 'data'
 
 # This starts the Flask app and gives it a secret key so the cart can be remembered in the session.
 app = Flask(__name__, static_folder='static', static_url_path='/static')
@@ -9,7 +15,7 @@ app.secret_key = 'parfait_pastries_secret'
 
 # This function creates the orders table if it does not already exist, so the app can save order data.
 def initialise_database():
-    with sqlite3.connect('bakery.db') as conn:
+    with sqlite3.connect(DB_PATH) as conn:
         cursor = conn.cursor()
         cursor.execute(
             '''
@@ -29,11 +35,26 @@ def initialise_database():
 
 # This loads the pastry and addon information from JSON files, which keeps the data easy to update.
 def load_data():
-    with open('data/pasteries.json', encoding='utf-8') as file:
+    with open(DATA_DIR / 'pastries.json', encoding='utf-8') as file:
         pastries = json.load(file)
-    with open('data/addons.json', encoding='utf-8') as file:
+    with open(DATA_DIR / 'addons.json', encoding='utf-8') as file:
         addons = json.load(file)
     return pastries, addons
+
+
+def get_view_context(selected_addons=None):
+    cart = session.get('cart', {})
+    selected_addons = session.get('selected_addons', {}) if selected_addons is None else selected_addons
+    pastries, addons = load_data()
+    total, discount_applied = calculate_total(cart, selected_addons)
+    return {
+        'pastries': pastries,
+        'addons': addons,
+        'cart': cart,
+        'total': total,
+        'selected_addons': selected_addons,
+        'discount_applied': discount_applied,
+    }
 
 
 # This works out the total price and applies the 50% discount to make the checkout look like the mockup.
@@ -53,53 +74,22 @@ def calculate_total(cart, selected_addons=None):
 # This route loads the homepage and sends the bakery data to the homepage template.
 @app.route('/')
 def index():
-    cart = session.get('cart', {})
-    selected_addons = session.get('selected_addons', {})
-    pastries, addons = load_data()
-    total, discount_applied = calculate_total(cart, selected_addons)
-    return render_template(
-        'index.html',
-        pastries=pastries,
-        addons=addons,
-        cart=cart,
-        total=total,
-        selected_addons=selected_addons,
-        discount_applied=discount_applied,
-    )
+    context = get_view_context()
+    return render_template('index.html', **context)
 
 
 # This route loads the addons page, where the customer can see extra items and the order summary.
 @app.route('/addons')
 def addons_page():
-    cart = session.get('cart', {})
-    selected_addons = session.get('selected_addons', {})
-    pastries, addons = load_data()
-    total, discount_applied = calculate_total(cart, selected_addons)
-    return render_template(
-        'addons.html',
-        pastries=pastries,
-        addons=addons,
-        cart=cart,
-        total=total,
-        selected_addons=selected_addons,
-        discount_applied=discount_applied,
-    )
+    context = get_view_context()
+    return render_template('addons.html', **context)
 
 
 # This route loads the best sellers page and passes the same cart information through to the template.
 @app.route('/best-sellers')
 def best_sellers_page():
-    cart = session.get('cart', {})
-    pastries, addons = load_data()
-    total, discount_applied = calculate_total(cart, {})
-    return render_template(
-        'best_sellers.html',
-        pastries=pastries,
-        addons=addons,
-        cart=cart,
-        total=total,
-        discount_applied=discount_applied,
-    )
+    context = get_view_context(selected_addons={})
+    return render_template('best_sellers.html', **context)
 
 
 # This route receives the selected pastry from the form and adds it into the cart session.

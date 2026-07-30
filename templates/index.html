@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- This hero section introduces the bakery brand and shows the most popular pastries. -->
+<section class="hero">
+    <h1 class="brand-title">Parfait Pasteries</h1>
+    <h3 class="subtitle">GIVE YOURSELF A TREAT</h3>
+    <p class="hero-desc">
+        Located in a cozy corner where the air smells of toasted sugar and browned butter, Parfait Pastries feels like a little sanctuary pulled right out of a novel. It's the right place to slow down, support a sweet local business, and remind yourself that an afternoon treat isn't just delicious — it's essential!
+    </p>
+
+    <div class="featured-circles">
+        {% for name, details in (pastries.items()|list)[:3] %}
+        <div class="gingham-circle-large">
+            <img src="{{ url_for('static', filename='images/' + details['image']) }}" alt="{{ name }}">
+        </div>
+        {% endfor %}
+    </div>
+    <p class="best-selling-text">✉ ✦ Our best selling slices! ✦ ✎</p>
+</section>
+
+<!-- This promo banner is used to highlight the sale and make the homepage feel more exciting. -->
+<section class="promo-banner">
+    <div class="floral-left"><img src="{{ url_for('static', filename='images/floral-branch.svg') }}" alt="floral left"></div>
+    <div class="promo-content">
+        <h4>OPENING SWEET SALE!</h4>
+        <h2><span class="sparkle">✦</span> Desserts <br><span class="huge-text">50%</span> <span class="sparkle">✦</span></h2>
+        <p>Discount only applies to instore purchases and click and collect.<br>Over 20 different pasteries and bakery goods to choose from!</p>
+    </div>
+    <div class="floral-right"><img src="{{ url_for('static', filename='images/floral-branch.svg') }}" alt="floral right"></div>
+</section>
+
+{% endblock %}

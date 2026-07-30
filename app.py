@@ -1,13 +1,19 @@
 import json
 import sqlite3
+from pathlib import Path
+
 from flask import Flask, flash, redirect, render_template, request, session, url_for
+
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / 'data'
+DB_PATH = BASE_DIR / 'bakery.db'
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 app.secret_key = 'parfait_pastries_secret'
 
 
 def initialise_database():
-    with sqlite3.connect('bakery.db') as conn:
+    with sqlite3.connect(DB_PATH) as conn:
         cursor = conn.cursor()
         cursor.execute(
             '''
@@ -26,9 +32,9 @@ def initialise_database():
 
 
 def load_data():
-    with open('data/pasteries.json', encoding='utf-8') as file:
+    with (DATA_DIR / 'pasteries.json').open(encoding='utf-8') as file:
         pastries = json.load(file)
-    with open('data/addons.json', encoding='utf-8') as file:
+    with (DATA_DIR / 'addons.json').open(encoding='utf-8') as file:
         addons = json.load(file)
     return pastries, addons
 
@@ -40,7 +46,7 @@ def calculate_total(cart, selected_addons=None):
 
     discount_applied = total > 0
     if discount_applied:
-        total *= 0.5
+        total *= 0.3
 
     return total, discount_applied
 
@@ -97,13 +103,18 @@ def best_sellers_page():
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
     pastry = request.form['pastry']
-    pastries, _ = load_data()
+    pastries, addons = load_data()
     cart = session.get('cart', {})
+
+    item_data = pastries.get(pastry) or addons.get(pastry)
+    if item_data is None:
+        flash(f'Item "{pastry}" was not found.')
+        return redirect(url_for('addons_page'))
 
     if pastry in cart:
         cart[pastry]['quantity'] += 1
     else:
-        cart[pastry] = {'price': pastries[pastry]['price'], 'quantity': 1}
+        cart[pastry] = {'price': item_data['price'], 'quantity': 1}
 
     session['cart'] = cart
     session.modified = True

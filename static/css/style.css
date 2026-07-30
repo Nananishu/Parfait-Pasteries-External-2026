@@ -32,3 +32,111 @@ a { text-decoration: none; }
     background-position: 0 0, 10px 10px;
     border-bottom: 1px solid rgba(0,0,0,0.05);
 }
+.nav-right svg, .nav-left svg {
+    margin-left: 20px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+/* Home page hero */
+/* This controls the welcome area at the top of the homepage. */
+.hero {
+    text-align: center;
+    padding: 50px 20px 20px;
+}
+.brand-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 5.5rem;
+    color: #000;
+    margin: 0;
+    letter-spacing: 2px;
+}
+.subtitle {
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    font-size: 0.95rem;
+    margin-top: 5px;
+    text-transform: uppercase;
+}
+.hero-desc {
+    max-width: 800px;
+    margin: 20px auto;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #444;
+}
+
+/* Circles */
+.featured-circles {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin: 40px 0 20px;
+}
+.gingham-circle-large {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    /* Gingham border effect */
+    border: 15px solid transparent;
+    background: linear-gradient(white, white) padding-box, 
+                repeating-linear-gradient(45deg, #F4CCD6 0, #F4CCD6 10px, #FFF 10px, #FFF 20px) border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+.gingham-circle-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.best-selling-text {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 600;
+}
+
+/* Promo banner */
+.promo-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 20px;
+    position: relative;
+    margin-bottom: 20px;
+}
+.floral-left, .floral-right {
+    font-size: 8rem;
+    position: absolute;
+    opacity: 0.8;
+}
+.floral-left { left: 5%; top: 10px; }
+.floral-right { right: 5%; bottom: -10px; }
+
+.promo-content h4 {
+    font-weight: 800;
+    letter-spacing: 3px;
+    margin-bottom: 0;
+    font-size: 1rem;
+}
+.promo-content h2 {
+    font-size: 5rem;
+    font-weight: 800;
+    margin: 10px 0;
+    line-height: 0.9;
+}
+.huge-text {
+    font-size: 8rem;
+    font-family: 'Bagel Fat One', 'Poppins', sans-serif;
+}
+.sparkle { font-size: 3rem; vertical-align: super; }
+.promo-content p {
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 600;
+}
+

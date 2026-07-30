@@ -1,32 +1,32 @@
 {
-    "Blueberry Slice": {
+    "Custard Pudding parfait": {
         "price": 7.50,
-        "tags": ["Halal", "Vegetarian"],
-        "desc": "A soft, fluffy vanilla sponge layered with fresh blueberry dessert set... sweet and perfectly balanced!",
-        "image": "blueberry.png"
+        "tags": ["Vegetarian", "Contains Dairy"],
+        "desc": "A delightful glass parfait layered with sweet cream and fresh fruit, crowned with a rich baked custard flan, whipped cream, and a cherry. Sweet, creamy, and visually stunning!",
+        "image": "custard.jpg"
     },
     "Choco Dream": {
         "price": 7.50,
-        "tags": ["Halal", "Gluten-Free (Oats)"],
+        "tags": ["Vegetarian", "Gluten-Free (Oats)"],
         "desc": "Rich, chocolate-dipped biscuit with a creamy filling that melts in your mouth...",
-        "image": "choco.png"
+        "image": "chocolatecake.jpg"
     },
     "Strawberry Delight": {
         "price": 8.00,
-        "tags": ["Halal", "Contains Dairy"],
-        "desc": "A light and airy Japanese sponge cake layered with sweet whipped cream and fresh slices...",
-        "image": "strawberry.png"
+        "tags": ["Vegetarian", "Contains Dairy"],
+        "desc": "Light and airy vanilla sponge cake layered with generous amounts of freshly whipped cream and juicy, ripe strawberries. A timeless, refreshing favorite!",
+        "image": "straw.jpg"
     },
-    "Peony Dream": {
+    "Fruity Dream": {
         "price": 5.00,
-        "tags": ["Halal", "Nut-Free"],
-        "desc": "A delicate pink almond macaron shell filled with a smooth strawberry frosting...",
-        "image": "peony.png"
+        "tags": ["Vegetarian", "Nut-Free", "Contains Dairy"],
+        "desc": "A light, airy vanilla sponge cake layered with fluffy whipped cream and a colorful medley of fresh seasonal fruits, including banana, grapes, and citrus. Bright, refreshing, and perfectly sweet!",
+        "image": "fruity.jpg"
     },
-    "Midsummer Magic": {
+    "Midsummer Matcha Magic": {
         "price": 12.50,
-        "tags": ["Halal", "Vegetarian"],
-        "desc": "Soft Japanese milk bread (Shokupan) packed with sweet chantilly cream and vibrant slices...",
-        "image": "midsummer.png"
+        "tags": [ "Vegetarian", "Contains Dairy"],
+        "desc": "Vibrant matcha green tea sponge layered with a sweet, pastel pink berry cream, coated in smooth matcha frosting and topped with a cherry. Earthy, sweet, and perfectly balanced!",
+        "image": "matchacake.jpg"
     }
 }

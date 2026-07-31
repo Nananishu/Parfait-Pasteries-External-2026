@@ -99,44 +99,399 @@ a { text-decoration: none; }
     font-weight: 600;
 }
 
-/* Promo banner */
-.promo-banner {
+/* Promo image */
+.promo-image-section {
     display: flex;
     justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 60px 20px;
-    position: relative;
-    margin-bottom: 20px;
+    padding: 20px 20px 40px;
 }
-.floral-left, .floral-right {
-    font-size: 8rem;
-    position: absolute;
-    opacity: 0.8;
+.promo-image {
+    width: min(100%, 900px);
+    height: auto;
+    display: block;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
-.floral-left { left: 5%; top: 10px; }
-.floral-right { right: 5%; bottom: -10px; }
 
-.promo-content h4 {
-    font-weight: 800;
-    letter-spacing: 3px;
-    margin-bottom: 0;
-    font-size: 1rem;
+/* Addons and summary layout */
+/* This controls the two-column layout for the addons page and the order summary. */
+.page-shell {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 40px 24px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
-.promo-content h2 {
-    font-size: 5rem;
-    font-weight: 800;
+.page-box {
+    margin-top: 0;
+}
+
+/* Mimicking the wavy border with a solid thick pink border + radius */
+.wavy-box {
+    background-color: white;
+    padding: 40px;
+    border: 12px solid #F4CCD6;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+.wavy-box { position: relative; overflow: visible; }
+.scallop-frame {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% + 48px);
+    height: auto;
+    pointer-events: none;
+    z-index: -1;
+}
+.addons-box { flex: 1.5; }
+.summary-box { flex: 1; }
+
+.cursive-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.5rem;
+    text-align: center;
+    color: #C1897C; 
+    margin: 0 0 20px 0;
+}
+
+/* Addons Internal Layout */
+.addons-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+.addon-col {
+    flex: 1;
+    border: 1px solid #eee;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+}
+.cursive-subtitle {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2rem;
+    color: #333;
+    margin: 15px 0;
+}
+.addon-col p {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin: 8px 0;
+    color: #555;
+}
+
+.addon-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
     margin: 10px 0;
-    line-height: 0.9;
+    padding: 8px 0;
+    border-bottom: 1px dashed #f0d8df;
 }
-.huge-text {
-    font-size: 8rem;
-    font-family: 'Bagel Fat One', 'Poppins', sans-serif;
+.addon-row-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 0.8rem;
+    color: #555;
 }
-.sparkle { font-size: 3rem; vertical-align: super; }
-.promo-content p {
-    font-size: 0.9rem;
+.addon-btn {
+    width: auto;
+    padding: 7px 12px;
+    font-size: 0.7rem;
+}
+
+.addon-rect-image {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+
+/* Summary list */
+/* This styles the cart items so the summary looks neat and easy to read. */
+.summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.summary-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+}
+.summary-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.mini-gingham-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 4px solid transparent;
+    background: linear-gradient(white, white) padding-box, 
+                repeating-linear-gradient(45deg, #F4CCD6 0, #F4CCD6 5px, #FFF 5px, #FFF 10px) border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mini-gingham-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.summary-info strong {
+    display: block;
+    color: #333;
+}
+.discount-text {
+    color: #4CAF50;
+    font-weight: 700;
+    font-size: 0.7rem;
+}
+.summary-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: right;
+}
+.summary-price-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+.old-price {
+    text-decoration: line-through;
+    color: #d9534f;
+    font-size: 0.75rem;
+}
+.new-price {
+    color: #2e8b57;
+    font-weight: 700;
+}
+.remove-btn {
+    color: #d9534f;
+    font-weight: 700;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: 50%;
+    text-decoration: none;
+}
+.remove-btn:hover {
+    background-color: #fff1f1;
+}
+.summary-divider {
+    border: none;
+    border-top: 2px dashed #eee;
+    margin: 20px 0;
+}
+.totals p {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin: 8px 0;
+    color: #666;
+}
+.totals p strong {
+    color: #333;
+    font-weight: 700;
+}
+
+/* Best sellers cards */
+/* This styles the best sellers area and the rounded product cards. */
+.best-sellers-wrapper {
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+}
+.best-sellers-box {
+    background: white;
+    border: 4px solid #F4CCD6;
+    border-radius: 40px;
+    padding: 40px 20px;
+    max-width: 1200px;
+    width: 100%;
+    text-align: center;
+}
+.pill-grid {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+/* The Pill Cards */
+.pill-card {
+    width: 170px;
+    background: #fff;
+    /* Faint pink border for pills */
+    border: 2px solid rgba(244, 204, 214, 0.5);
+    border-radius: 120px; /* Extremely rounded to make a pill */
+    padding: 30px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+.gingham-circle-small {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 8px solid transparent;
+    background: linear-gradient(white, white) padding-box, 
+                repeating-linear-gradient(45deg, #F4CCD6 0, #F4CCD6 8px, #FFF 8px, #FFF 16px) border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.gingham-circle-small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.cursive-card-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.8rem;
+    color: #C1897C;
+    margin: 10px 0 5px 0;
+    line-height: 1;
+}
+.best-sellers-blurb {
+    max-width: 720px;
+    margin: 10px auto 0;
+    color: #6f6f6f;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+.pill-card .price {
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* Tags */
+.tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.tag {
+    background: #fdf5f6;
+    border: 1px solid #F4CCD6;
     color: #555;
     font-weight: 600;
+    font-size: 0.55rem;
+    padding: 3px 8px;
+    border-radius: 10px;
 }
+.pill-card .desc {
+    font-size: 0.6rem;
+    color: #888;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 4px;
+}
+.btn-secondary,
+.btn-primary {
+    border: none;
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    line-height: 1.1;
+}
+.btn-secondary {
+    background: #fdf5f6;
+    color: #8a5a5a;
+}
+.btn-primary {
+    background: #f4ccd6;
+    color: #5d3a3a;
+}
+
+/* ==========================
+   Top header / sticky bar
+   ========================== */
+.site-header {
+    background-color: #fdeff1;
+    background-image: repeating-linear-gradient(45deg, rgba(244,204,214,0.35) 25%, transparent 25%, transparent 75%, rgba(244,204,214,0.35) 75%, rgba(244,204,214,0.35));
+    background-size: 20px 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 24px;
+}
+.header-icons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.header-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    transition: background-color 180ms ease, transform 180ms ease;
+}
+.header-icon:hover {
+    background-color: rgba(244, 204, 214, 0.35);
+    transform: translateY(-1px);
+}
+.header-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+}
+
+/* Slightly increase hero title scale to match mockup */
+.brand-title {
+    font-size: 6.5rem;
+    margin-top: 6px;
+}
+.subtitle { font-size: 1rem; }
+
+/* Promo banner scale adjustments */
+/* Make gingham circles a touch larger for visual match */
+.gingham-circle-large { width: 150px; height: 150px; border: 18px solid transparent; }
 

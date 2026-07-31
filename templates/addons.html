@@ -60,7 +60,7 @@
                 <div class="summary-right">
                     <div class="summary-price-stack">
                         <span class="old-price">${{ "%.2f"|format(item.price * item.quantity) }}</span>
-                        <span class="new-price">${{ "%.2f"|format((item.price * item.quantity) * 0.8) }}</span>
+                        <span class="new-price">${{ "%.2f"|format((item.price * item.quantity) * 0.3) }}</span>
                     </div>
                     <a href="{{ url_for('remove_from_cart', item=name) }}" class="remove-btn" aria-label="Remove {{ name }}">×</a>
                 </div>

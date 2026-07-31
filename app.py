@@ -46,7 +46,7 @@ def calculate_total(cart, selected_addons=None):
 
     discount_applied = total > 0
     if discount_applied:
-        total *= 0.3
+        total *= 0.7
 
     return total, discount_applied
 

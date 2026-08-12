@@ -34,6 +34,12 @@
         "tags": ["Contains Gluten", "Contains Eggs", "Contains Dairy"],
         "desc": "A buttery pastry base filled with smooth, zesty lemon curd and topped with fluffy, lightly toasted meringue. A refreshing balance of sweet and tangy flavours.",
         "image": "Meringue.jpg"
+    },
+    "Blueberry Cream Mille-Feuille": {
+        "price": 10.20,
+        "tags": ["Contains Gluten", "Contains Dairy", "Contains Eggs"],
+        "desc": "Layers of crisp, golden pastry filled with smooth vanilla and blueberry cream. Finished with a delicate purple dusting and fresh blueberries, this elegant dessert offers a lovely mix of creamy, fruity, and buttery flavours.",
+        "image": "blueberry.jpg"
     }
 }
 

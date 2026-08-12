@@ -259,29 +259,14 @@ a { text-decoration: none; }
     display: block;
     color: #333;
 }
-.discount-text {
-    color: #4CAF50;
-    font-weight: 700;
-    font-size: 0.7rem;
-}
 .summary-right {
     display: flex;
     align-items: center;
     gap: 10px;
     text-align: right;
 }
-.summary-price-stack {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-}
-.old-price {
-    text-decoration: line-through;
-    color: #d9534f;
-    font-size: 0.75rem;
-}
-.new-price {
+.discounted-price,
+.discounted-total {
     color: #2e8b57;
     font-weight: 700;
 }

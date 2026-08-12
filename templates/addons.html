@@ -58,10 +58,7 @@
                     </div>
                 </div>
                 <div class="summary-right">
-                    <div class="summary-price-stack">
-                        <span class="old-price">${{ "%.2f"|format(item.price * item.quantity) }}</span>
-                        <span class="new-price">${{ "%.2f"|format((item.price * item.quantity) * 0.3) }}</span>
-                    </div>
+                    <span class="discounted-price">${{ "%.2f"|format((item.price * item.quantity) * 0.7) }}</span>
                     <a href="{{ url_for('remove_from_cart', item=name) }}" class="remove-btn" aria-label="Remove {{ name }}">×</a>
                 </div>
             </li>
@@ -74,10 +71,10 @@
         <hr class="summary-divider">
 
         <div class="totals">
-            <p><span>Subtotal</span><strong>${{ "%.2f"|format(total) }}</strong></p>
-            {% if discount_applied %}
-            <p class="discount-text">30% off applied</p>
-            {% endif %}
+            <p class="total-after-discount">
+                <span>Total after discount</span>
+                <strong class="discounted-total">${{ "%.2f"|format(total) }}</strong>
+            </p>
             <div class="button-group">
                 <a href="{{ url_for('index') }}" class="btn-secondary">Back</a>
                 <a href="#" class="btn-primary">Checkout</a>

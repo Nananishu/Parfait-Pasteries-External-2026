@@ -28,5 +28,12 @@
         "tags": [ "Vegetarian", "Contains Dairy"],
         "desc": "Vibrant matcha green tea sponge layered with a sweet, pastel pink berry cream, coated in smooth matcha frosting and topped with a cherry. Earthy, sweet, and perfectly balanced!",
         "image": "matchacake.jpg"
+    },
+    "Lemon Meringue Tart": {
+        "price": 9.70,
+        "tags": ["Contains Gluten", "Contains Eggs", "Contains Dairy"],
+        "desc": "A buttery pastry base filled with smooth, zesty lemon curd and topped with fluffy, lightly toasted meringue. A refreshing balance of sweet and tangy flavours.",
+        "image": "Meringue.jpg"
     }
 }
+

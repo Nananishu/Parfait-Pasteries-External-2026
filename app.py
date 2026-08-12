@@ -100,6 +100,42 @@ def best_sellers_page():
     )
 
 
+@app.route('/feedback', methods=['GET', 'POST'])
+def feedback_page():
+    cart = session.get('cart', {})
+    pastries, addons = load_data()
+    total, discount_applied = calculate_total(cart, {})
+
+    locations = ['Ormiston', 'Manukau', 'Botany', 'Papatoetoe', 'Manurewa']
+    selected_location = 'Ormiston'
+    rating = 5
+    comments = ''
+    feedback_submitted = False
+    feedback_location = ''
+
+    if request.method == 'POST':
+        selected_location = request.form.get('location', selected_location)
+        rating = request.form.get('rating', rating)
+        comments = request.form.get('comments', '').strip()
+        feedback_submitted = True
+        feedback_location = selected_location
+
+    return render_template(
+        'feedback.html',
+        pastries=pastries,
+        addons=addons,
+        cart=cart,
+        total=total,
+        discount_applied=discount_applied,
+        locations=locations,
+        selected_location=selected_location,
+        rating=rating,
+        comments=comments,
+        feedback_submitted=feedback_submitted,
+        feedback_location=feedback_location,
+    )
+
+
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
     pastry = request.form['pastry']

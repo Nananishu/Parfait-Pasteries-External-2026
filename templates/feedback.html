@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="feedback-shell">
+    <div class="feedback-card">
+        <h2 class="cursive-title">Feedbacks</h2>
+        <p class="section-text">Share your thoughts on our shop location, star rating, and experience so we can keep making sweets worth savoring.</p>
+
+        <form action="{{ url_for('feedback_page') }}" method="post" class="feedback-form" autocomplete="off">
+            <div class="form-row">
+                <label class="form-label" for="location">Location</label>
+                <select id="location" name="location" class="form-input">
+                    {% for location in locations %}
+                        <option value="{{ location }}" {% if location == selected_location %}selected{% endif %}>{{ location }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-row">
+                <span class="form-label">Star rating</span>
+                <div class="rating-stars" aria-label="Star rating">
+                    {% for value in [5, 4, 3, 2, 1] %}
+                        <input type="radio" id="rating-{{ value }}" name="rating" value="{{ value }}" {% if rating|int == value %}checked{% endif %}>
+                        <label for="rating-{{ value }}" class="star">★</label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label class="form-label" for="comments">Comments</label>
+                <textarea id="comments" name="comments" class="form-input form-textarea" placeholder="Tell us what you loved or how we can improve...">{{ comments }}</textarea>
+            </div>
+
+            <button type="submit" class="btn-primary">Submit feedback</button>
+
+            {% if feedback_submitted %}
+                <p class="feedback-message">Thank you! Your feedback for {{ feedback_location or 'our shop' }} has been submitted.</p>
+            {% endif %}
+        </form>
+    </div>
+</section>
+{% endblock %}

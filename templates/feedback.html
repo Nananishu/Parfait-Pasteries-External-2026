@@ -6,6 +6,7 @@
         <h2 class="cursive-title">Feedbacks</h2>
         <p class="section-text">Share your thoughts on your experience so we can keep making sweets worth savoring.</p>
 
+        {% if not feedback_submitted %}
         <form action="{{ url_for('feedback_page') }}" method="post" class="feedback-form" autocomplete="off">
             <div class="form-row">
                 <label class="form-label" for="location">Location</label>
@@ -33,10 +34,10 @@
 
             <button type="submit" class="btn-primary">Submit feedback</button>
 
-            {% if feedback_submitted %}
-                <p class="feedback-message">Thank you! Your feedback for {{ feedback_location or 'our shop' }} has been submitted.</p>
-            {% endif %}
         </form>
+        {% else %}
+            <p class="feedback-message">Thank you! Your feedback for {{ feedback_location or 'our shop' }} has been submitted.</p>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

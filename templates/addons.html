@@ -75,10 +75,29 @@
                 <span>Total after discount</span>
                 <strong class="discounted-total">${{ "%.2f"|format(total) }}</strong>
             </p>
-            <div class="button-group">
-                <a href="{{ url_for('index') }}" class="btn-secondary">Back</a>
-                <a href="#" class="btn-primary">Checkout</a>
-            </div>
+
+            <form action="{{ url_for('checkout') }}" method="post" class="checkout-form">
+                <label>
+                    <span>Customer name</span>
+                    <input type="text" name="customer_name" placeholder="Your name" required>
+                </label>
+                <label>
+                    <span>Email</span>
+                    <input type="email" name="customer_email" placeholder="you@example.com">
+                </label>
+                <label>
+                    <span>Phone</span>
+                    <input type="tel" name="customer_phone" placeholder="021 123 4567">
+                </label>
+                <label>
+                    <span>Delivery address</span>
+                    <textarea name="delivery_address" rows="3" placeholder="Street address and suburb"></textarea>
+                </label>
+                <div class="button-group">
+                    <a href="{{ url_for('index') }}" class="btn-secondary">Back</a>
+                    <button type="submit" class="btn-primary">Checkout</button>
+                </div>
+            </form>
         </div>
     </div>
 </section>

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-shell">
+    <div class="page-box wavy-box" style="max-width: 980px; width: 100%;">
+        <h2 class="cursive-title">Order History</h2>
+
+        {% if orders %}
+            <div class="history-list">
+                {% for order in orders %}
+                <div class="history-item">
+                    <div>
+                        <p class="label">Invoice</p>
+                        <h3>{{ order.invoice_number }}</h3>
+                    </div>
+                    <div>
+                        <p class="label">Customer</p>
+                        <p>{{ order.customer_name }}</p>
+                    </div>
+                    <div>
+                        <p class="label">Date</p>
+                        <p>{{ order.date }}</p>
+                    </div>
+                    <div>
+                        <p class="label">Total</p>
+                        <p>${{ "%.2f"|format(order.total) }}</p>
+                    </div>
+                    <a href="{{ url_for('invoice_page', invoice_number=order.invoice_number) }}" class="btn-primary">View</a>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-state">No orders have been placed yet.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

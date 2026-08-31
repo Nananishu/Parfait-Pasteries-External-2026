@@ -287,16 +287,60 @@ a { text-decoration: none; }
     border-top: 2px dashed #eee;
     margin: 20px 0;
 }
+.totals {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
 .totals p {
     display: flex;
     justify-content: space-between;
     font-size: 0.85rem;
-    margin: 8px 0;
+    margin: 0;
     color: #666;
 }
 .totals p strong {
     color: #333;
     font-weight: 700;
+}
+.checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+}
+.checkout-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.72rem;
+    color: #555;
+    font-weight: 600;
+}
+.checkout-form input,
+.checkout-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #f0d8df;
+    border-radius: 12px;
+    background: #fffdfd;
+    padding: 9px 10px;
+    font: inherit;
+    color: #333;
+}
+.checkout-form input:focus,
+.checkout-form textarea:focus {
+    outline: 2px solid rgba(244, 204, 214, 0.65);
+    border-color: #f4ccd6;
+}
+.checkout-form textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+.checkout-form .button-group {
+    margin-top: 8px;
+    justify-content: flex-end;
+    width: 100%;
 }
 
 /* Best sellers cards */
@@ -409,6 +453,9 @@ a { text-decoration: none; }
 }
 .btn-secondary,
 .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border: none;
     border-radius: 999px;
     padding: 7px 12px;
@@ -416,6 +463,8 @@ a { text-decoration: none; }
     font-weight: 600;
     cursor: pointer;
     line-height: 1.1;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .btn-secondary {
     background: #fdf5f6;
@@ -424,6 +473,11 @@ a { text-decoration: none; }
 .btn-primary {
     background: #f4ccd6;
     color: #5d3a3a;
+}
+.btn-primary:hover,
+.btn-secondary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(244, 204, 214, 0.25);
 }
 
 /* ==========================

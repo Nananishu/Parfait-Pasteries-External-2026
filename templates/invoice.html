@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-shell">
+    <div class="page-box wavy-box" style="max-width: 760px; width: 100%;">
+        <h2 class="cursive-title">Invoice</h2>
+
+        <div class="invoice-card">
+            <div class="invoice-header">
+                <div>
+                    <p class="label">Invoice number</p>
+                    <h3>{{ order.invoice_number }}</h3>
+                </div>
+                <div>
+                    <p class="label">Order date</p>
+                    <h3>{{ order.date }}</h3>
+                </div>
+            </div>
+
+            <div class="invoice-customer">
+                <p><strong>Customer:</strong> {{ order.customer_name }}</p>
+                {% if order.customer_email %}<p><strong>Email:</strong> {{ order.customer_email }}</p>{% endif %}
+                {% if order.customer_phone %}<p><strong>Phone:</strong> {{ order.customer_phone }}</p>{% endif %}
+                {% if order.delivery_address %}<p><strong>Delivery:</strong> {{ order.delivery_address }}</p>{% endif %}
+            </div>
+
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for name, item in order.items.items() %}
+                    <tr>
+                        <td>{{ name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ "%.2f"|format(item.price * item.quantity) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="invoice-total">
+                <span>Total paid</span>
+                <strong>${{ "%.2f"|format(order.total) }}</strong>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

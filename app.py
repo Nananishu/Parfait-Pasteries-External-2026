@@ -1,8 +1,10 @@
 import json
 import sqlite3
+import uuid
+from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import Flask, abort, flash, redirect, render_template, request, session, url_for
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / 'data'
@@ -19,8 +21,11 @@ def initialise_database():
             '''
             CREATE TABLE IF NOT EXISTS orders (
                 order_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                invoice_number TEXT,
+                invoice_number TEXT UNIQUE,
                 customer_name TEXT,
+                customer_email TEXT,
+                customer_phone TEXT,
+                delivery_address TEXT,
                 items TEXT,
                 addons TEXT,
                 total REAL,
@@ -28,6 +33,17 @@ def initialise_database():
             )
             '''
         )
+
+        existing_columns = [
+            row[1] for row in cursor.execute('PRAGMA table_info(orders)').fetchall()
+        ]
+
+        for column_name in ['customer_email', 'customer_phone', 'delivery_address', 'addons']:
+            if column_name not in existing_columns:
+                cursor.execute(
+                    f'ALTER TABLE orders ADD COLUMN {column_name} TEXT'
+                )
+
         conn.commit()
 
 
@@ -48,7 +64,7 @@ def calculate_total(cart, selected_addons=None):
     if discount_applied:
         total *= 0.7
 
-    return total, discount_applied
+    return round(total, 2), discount_applied
 
 
 @app.route('/')
@@ -166,6 +182,72 @@ def remove_from_cart(item):
         session['cart'] = cart
         session.modified = True
     return redirect(url_for('addons_page'))
+
+
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    cart = session.get('cart', {})
+    if not cart:
+        flash('Your cart is empty.')
+        return redirect(url_for('addons_page'))
+
+    customer_name = request.form.get('customer_name', '').strip() or 'Walk-in Customer'
+    customer_email = request.form.get('customer_email', '').strip()
+    customer_phone = request.form.get('customer_phone', '').strip()
+    delivery_address = request.form.get('delivery_address', '').strip()
+    total, _ = calculate_total(cart, {})
+    invoice_number = f'PP-{datetime.now().strftime("%Y%m%d%H%M%S")}-{uuid.uuid4().hex[:6].upper()}'
+
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute(
+            '''
+            INSERT INTO orders (
+                invoice_number, customer_name, customer_email, customer_phone,
+                delivery_address, items, total
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''',
+            (
+                invoice_number,
+                customer_name,
+                customer_email,
+                customer_phone,
+                delivery_address,
+                json.dumps(cart),
+                total,
+            ),
+        )
+        conn.commit()
+
+    session.pop('cart', None)
+    session.modified = True
+    return redirect(url_for('invoice_page', invoice_number=invoice_number))
+
+
+@app.route('/invoice/<invoice_number>')
+def invoice_page(invoice_number):
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        order = conn.execute(
+            'SELECT * FROM orders WHERE invoice_number = ?',
+            (invoice_number,),
+        ).fetchone()
+
+    if order is None:
+        abort(404)
+
+    order = dict(order)
+    order['items'] = json.loads(order['items']) if order['items'] else {}
+    return render_template('invoice.html', order=order)
+
+
+@app.route('/order_history')
+def order_history_page():
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        orders = conn.execute(
+            'SELECT * FROM orders ORDER BY date DESC'
+        ).fetchall()
+    return render_template('order_history.html', orders=orders)
 
 
 if __name__ == '__main__':

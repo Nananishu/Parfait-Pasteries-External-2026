@@ -4,17 +4,19 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, abort, flash, redirect, render_template, request, session, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / 'data'
-DB_PATH = BASE_DIR / 'bakery.db'
+DB_PATH = DATA_DIR / 'bakery.db'
+INVOICES_DIR = DATA_DIR / 'invoices'
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 app.secret_key = 'parfait_pastries_secret'
 
 
 def initialise_database():
+    INVOICES_DIR.mkdir(parents=True, exist_ok=True)
     with sqlite3.connect(DB_PATH) as conn:
         cursor = conn.cursor()
         cursor.execute(
@@ -45,6 +47,9 @@ def initialise_database():
                 )
 
         conn.commit()
+
+
+initialise_database()
 
 
 def load_data():
@@ -195,16 +200,27 @@ def checkout():
     customer_email = request.form.get('customer_email', '').strip()
     customer_phone = request.form.get('customer_phone', '').strip()
     delivery_address = request.form.get('delivery_address', '').strip()
+    pastries, addon_catalogue = load_data()
+    items = {name: details for name, details in cart.items() if name in pastries}
+    addons = {name: details for name, details in cart.items() if name in addon_catalogue}
+    subtotal = sum(item['price'] * item['quantity'] for item in cart.values())
     total, _ = calculate_total(cart, {})
-    invoice_number = f'PP-{datetime.now().strftime("%Y%m%d%H%M%S")}-{uuid.uuid4().hex[:6].upper()}'
+    timestamp = datetime.now()
+    customer_slug = ''.join(
+        character for character in customer_name if character.isalnum() or character == '_'
+    ) or 'Customer'
+    invoice_number = (
+        f'INV_{customer_slug}_{timestamp.strftime("%Y-%m-%d_%H%M%S")}_'
+        f'{uuid.uuid4().hex[:6].upper()}'
+    )
 
     with sqlite3.connect(DB_PATH) as conn:
         conn.execute(
             '''
             INSERT INTO orders (
                 invoice_number, customer_name, customer_email, customer_phone,
-                delivery_address, items, total
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                delivery_address, items, addons, total
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ''',
             (
                 invoice_number,
@@ -212,32 +228,52 @@ def checkout():
                 customer_email,
                 customer_phone,
                 delivery_address,
-                json.dumps(cart),
+                json.dumps(items),
+                json.dumps(addons),
                 total,
             ),
         )
         conn.commit()
 
+    invoice_lines = [
+        f'Date: {timestamp.strftime("%Y-%m-%d %H:%M:%S")}',
+        f'Invoice Number: {invoice_number}',
+        f'Customer: {customer_name}',
+        '',
+        'Parfait Pasteries',
+        '-' * 50,
+        '',
+        'Items:',
+    ]
+    for name, item in items.items():
+        line_total = item['price'] * item['quantity']
+        invoice_lines.append(
+            f'  {name}: {item["quantity"]} x ${item["price"]:.2f} = ${line_total:.2f}'
+        )
+
+    invoice_lines.extend(['', 'Add-ons:'])
+    if addons:
+        for name, item in addons.items():
+            line_total = item['price'] * item['quantity']
+            invoice_lines.append(
+                f'  {name}: {item["quantity"]} x ${item["price"]:.2f} = ${line_total:.2f}'
+            )
+    else:
+        invoice_lines.append('  None')
+
+    invoice_lines.extend([
+        '',
+        f'Subtotal: ${subtotal:.2f}',
+        f'Total: ${total:.2f}',
+        '',
+    ])
+    invoice_path = INVOICES_DIR / f'{invoice_number}.txt'
+    invoice_path.write_text('\n'.join(invoice_lines), encoding='utf-8')
+
     session.pop('cart', None)
     session.modified = True
-    return redirect(url_for('invoice_page', invoice_number=invoice_number))
-
-
-@app.route('/invoice/<invoice_number>')
-def invoice_page(invoice_number):
-    with sqlite3.connect(DB_PATH) as conn:
-        conn.row_factory = sqlite3.Row
-        order = conn.execute(
-            'SELECT * FROM orders WHERE invoice_number = ?',
-            (invoice_number,),
-        ).fetchone()
-
-    if order is None:
-        abort(404)
-
-    order = dict(order)
-    order['items'] = json.loads(order['items']) if order['items'] else {}
-    return render_template('invoice.html', order=order)
+    flash(f'Purchase saved. Invoice {invoice_number} was saved to data/invoices.')
+    return redirect(url_for('addons_page'))
 
 
 @app.route('/order_history')

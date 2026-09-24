@@ -24,7 +24,6 @@
                         <p class="label">Total</p>
                         <p>${{ "%.2f"|format(order.total) }}</p>
                     </div>
-                    <a href="{{ url_for('invoice_page', invoice_number=order.invoice_number) }}" class="btn-primary">View</a>
                 </div>
                 {% endfor %}
             </div>

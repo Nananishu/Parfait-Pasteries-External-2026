@@ -1,0 +1,16 @@
+Date: 2026-09-24 15:05:03
+Invoice Number: INV_TeresaHon_2026-09-24_150503_4E6842
+Customer: Teresa Hon
+
+Parfait Pasteries
+--------------------------------------------------
+
+Items:
+  Fruity Dream: 1 x $10.00 = $10.00
+  Lemon Meringue Tart: 1 x $9.70 = $9.70
+
+Add-ons:
+  None
+
+Subtotal: $19.70
+Total: $13.79

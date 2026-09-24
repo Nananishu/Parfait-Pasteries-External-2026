@@ -1,6 +1,6 @@
 import sqlite3
 
-from app import app, DB_PATH
+from app import INVOICES_DIR, app, DB_PATH
 
 
 def test_checkout_creates_order_record():
@@ -28,16 +28,18 @@ def test_checkout_creates_order_record():
     )
 
     assert response.status_code == 302
-    assert response.headers['Location'].startswith('/invoice/')
+    assert response.headers['Location'].endswith('/addons')
 
     with sqlite3.connect(DB_PATH) as conn:
         row = conn.execute(
-            'SELECT customer_name, customer_email, items, total FROM orders WHERE customer_name = ?',
+            'SELECT invoice_number, customer_name, customer_email, items, total FROM orders WHERE customer_name = ?',
             ('Aisha',),
         ).fetchone()
 
     assert row is not None
-    assert row[0] == 'Aisha'
-    assert row[1] == 'aisha@example.com'
-    assert 'Custard Pudding parfait' in row[2]
-    assert float(row[3]) > 0
+    assert row[0].startswith('INV_Aisha_')
+    assert row[1] == 'Aisha'
+    assert row[2] == 'aisha@example.com'
+    assert 'Custard Pudding parfait' in row[3]
+    assert float(row[4]) > 0
+    assert (INVOICES_DIR / f'{row[0]}.txt').is_file()

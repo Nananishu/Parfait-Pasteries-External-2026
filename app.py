@@ -1,6 +1,7 @@
 import json
 import sqlite3
 import uuid
+from contextlib import closing
 from datetime import datetime
 from pathlib import Path
 
@@ -12,7 +13,8 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 # These paths tell the app where its data files and database are saved.
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / 'data'
-DB_PATH = DATA_DIR / 'bakery.db'
+DB_PATH = BASE_DIR / 'bakery.db'
+LEGACY_DB_PATH = DATA_DIR / 'bakery.db'
 INVOICES_DIR = DATA_DIR / 'invoices'
 
 # This creates the Flask app and gives it a secret key for saving cart data.
@@ -23,7 +25,7 @@ app.secret_key = 'parfait_pastries_secret'
 # This function makes sure the database and invoice folder exist before the app uses them.
 def initialise_database():
     INVOICES_DIR.mkdir(parents=True, exist_ok=True)
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         cursor = conn.cursor()
         cursor.execute(
             '''
@@ -53,7 +55,63 @@ def initialise_database():
                     f'ALTER TABLE orders ADD COLUMN {column_name} TEXT'
                 )
 
+        cursor.execute(
+            '''
+            CREATE UNIQUE INDEX IF NOT EXISTS orders_invoice_number_unique
+            ON orders (invoice_number)
+            '''
+        )
+        migrate_legacy_orders(cursor)
         conn.commit()
+
+
+def migrate_legacy_orders(cursor):
+    if not LEGACY_DB_PATH.is_file() or LEGACY_DB_PATH.resolve() == DB_PATH.resolve():
+        return
+
+    legacy_uri = f'{LEGACY_DB_PATH.resolve().as_uri()}?mode=ro'
+    with closing(sqlite3.connect(legacy_uri, uri=True)) as legacy_conn:
+        legacy_tables = legacy_conn.execute(
+            "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'orders'"
+        ).fetchone()
+        if legacy_tables is None:
+            return
+
+        legacy_conn.row_factory = sqlite3.Row
+        legacy_columns = {
+            row['name'] for row in legacy_conn.execute('PRAGMA table_info(orders)')
+        }
+        required_columns = {'invoice_number', 'customer_name', 'items', 'total'}
+        missing_columns = required_columns - legacy_columns
+        if missing_columns:
+            raise sqlite3.DatabaseError(
+                f'Cannot migrate legacy orders; missing columns: {sorted(missing_columns)}'
+            )
+
+        target_columns = (
+            'invoice_number',
+            'customer_name',
+            'customer_email',
+            'customer_phone',
+            'delivery_address',
+            'items',
+            'addons',
+            'total',
+            'date',
+        )
+        placeholders = ', '.join('?' for _ in target_columns)
+        columns_sql = ', '.join(target_columns)
+        rows = legacy_conn.execute('SELECT * FROM orders').fetchall()
+
+    for row in rows:
+        cursor.execute(
+            f'''
+            INSERT INTO orders ({columns_sql})
+            VALUES ({placeholders})
+            ON CONFLICT(invoice_number) DO NOTHING
+            ''',
+            tuple(row[column] if column in legacy_columns else None for column in target_columns),
+        )
 
 
 # Run the database setup when the app starts.
@@ -239,7 +297,7 @@ def checkout():
     )
 
     # Save the order into SQLite so it can be seen later in order history.
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         conn.execute(
             '''
             INSERT INTO orders (
@@ -306,7 +364,7 @@ def checkout():
 # This shows all saved orders from the database in date order.
 @app.route('/order_history')
 def order_history_page():
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn:
         conn.row_factory = sqlite3.Row
         orders = conn.execute(
             'SELECT * FROM orders ORDER BY date DESC'

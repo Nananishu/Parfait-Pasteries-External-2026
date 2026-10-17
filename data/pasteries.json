@@ -1,12 +1,12 @@
 {
     "Custard Pudding parfait": {
-        "price": 9.50,
+        "price": 11.50,
         "tags": ["Vegetarian", "Contains Dairy"],
         "desc": "A delightful glass parfait layered with sweet cream and fresh fruit, crowned with a rich baked custard flan, whipped cream, and a cherry. Sweet, creamy, and visually stunning!",
         "image": "custard.jpg"
     },
     "Choco Dream": {
-        "price": 9.50,
+        "price": 12.50,
         "tags": ["Vegetarian", "Gluten-Free (Oats)"],
         "desc": "A tender chocolate cake layered with airy whipped cream and sweet, juicy strawberries, finished with a silky chocolate frosting and a fresh strawberry on top. Every slice feels a little special.",
         "image": "chocolatecake.jpg"
@@ -40,6 +40,42 @@
         "tags": ["Contains Gluten", "Contains Dairy", "Contains Eggs"],
         "desc": "Layers of crisp, golden pastry filled with smooth vanilla and blueberry cream. Finished with a delicate purple dusting and fresh blueberries, this elegant dessert offers a lovely mix of creamy, fruity, and buttery flavours.",
         "image": "blueberry.jpg"
+    },
+    "Bunnys Choco Strawberry Tarts (2)": {
+        "price": 12.80,
+        "tags": ["Contains Gluten", "Contains Nuts", "Contains Dairy"],
+        "desc": "Rich, dark chocolate tarts packed with crunchy nuts, fresh strawberry slices, flower cookies, and a chocolate bunny topper! Decadent, whimsical, and packed with delicious flavor.",
+        "image": "bunny.jpe"
+    },
+    "Sleepy Bear Pineberry Tart": {
+        "price": 11.80,
+        "tags": ["Contains Gluten", "Contains Eggs", "Contains Dairy"],
+        "desc": "A buttery, crisp tart shell layered with smooth cream and rare white pineberries, crowned with an adorable sleeping meringue bear! A magical dessert crafted to bring a smile to every bite.",
+        "image": "bear.jpe"
+    },
+    "Strawdew Creamy Croissant": {
+        "price": 14.90,
+        "tags": ["Vegetarian", "Contains Gluten", "Contains Dairy"],
+        "desc": "A golden, flaky croissant sliced open and filled with rich whipped cream, juicy fresh strawberry slices, and a drizzle of sweet condensed milk. The perfect mix of buttery crispness and sweet fruity goodness!",
+        "image": "croissant.jpe"
+    },
+    "Whiskered Seal Cream Buns": {
+        "price": 15.00,
+        "tags": ["Contains Eggs", "Contains Dairy"],
+        "desc": "Soft, golden sponge buns stuffed with cloud-like whipped cream and decorated into the sweetest little seal faces! Finished with a bright red cherry on top, this treat is almost too cute to eat.",
+        "image": "sealbuns.jpe"
+    },
+    "Cloud Nine Soufflé Pancakes": {
+        "price": 13.30,
+        "tags": ["Contains Eggs", "Contains Dairy"],
+        "desc": "Ultra-fluffy Japanese soufflé pancakes that melt in your mouth! Drizzled with silky pink strawberry cream and sprinkled with sweet crushed nuts and strawberries for the ultimate dreamy treat.",
+        "image": "souffle.jpe"
+    },
+    "Starlight Berry Yogurt Bowl": {
+        "price": 12.50,
+        "tags": ["Vegetarian", "Contains Dairy"],
+        "desc": "A dreamy pink yogurt bowl swirled with crunchy chocolate granola, juicy frozen raspberries, and adorable banana stars! It’s bright, refreshing, and tastes like a cozy morning hug in a bowl.",
+        "image": "yoghurtbowl.jpe"
     }
 }
 

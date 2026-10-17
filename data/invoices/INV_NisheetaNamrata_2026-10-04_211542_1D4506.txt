@@ -1,0 +1,15 @@
+Date: 2026-10-04 21:15:42
+Invoice Number: INV_NisheetaNamrata_2026-10-04_211542_1D4506
+Customer: Nisheeta Namrata
+
+Parfait Pasteries
+--------------------------------------------------
+
+Items:
+  Custard Pudding parfait: 2 x $9.50 = $19.00
+
+Add-ons:
+  Garden Bouquet: 1 x $28.00 = $28.00
+
+Subtotal: $47.00
+Total: $32.90

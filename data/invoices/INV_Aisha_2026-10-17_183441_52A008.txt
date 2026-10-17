@@ -1,0 +1,15 @@
+Date: 2026-10-17 18:34:41
+Invoice Number: INV_Aisha_2026-10-17_183441_52A008
+Customer: Aisha
+
+Parfait Pasteries
+--------------------------------------------------
+
+Items:
+  Custard Pudding parfait: 1 x $9.50 = $9.50
+
+Add-ons:
+  Rose Bouquet: 1 x $34.00 = $34.00
+
+Subtotal: $43.50
+Total: $30.45

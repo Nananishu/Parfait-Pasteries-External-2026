@@ -1,0 +1,15 @@
+Date: 2026-10-17 19:47:46
+Invoice Number: INV_Parmila_2026-10-17_194746_9DD036
+Customer: Parmila
+
+Parfait Pasteries
+--------------------------------------------------
+
+Items:
+  Choco Dream: 1 x $9.50 = $9.50
+
+Add-ons:
+  Berry Bliss Tea: 1 x $8.00 = $8.00
+
+Subtotal: $17.50
+Total: $12.25

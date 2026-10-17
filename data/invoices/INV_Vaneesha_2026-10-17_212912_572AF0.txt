@@ -1,0 +1,15 @@
+Date: 2026-10-17 21:29:12
+Invoice Number: INV_Vaneesha_2026-10-17_212912_572AF0
+Customer: Vaneesha
+
+Parfait Pasteries
+--------------------------------------------------
+
+Items:
+  Strawberry Delight: 1 x $9.00 = $9.00
+
+Add-ons:
+  None
+
+Subtotal: $9.00
+Total: $6.30

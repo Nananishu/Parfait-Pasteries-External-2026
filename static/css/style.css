@@ -17,6 +17,30 @@ body, html {
 
 a { text-decoration: none; }
 
+.flash-messages {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    z-index: 1000;
+    width: min(calc(100% - 32px), 520px);
+    transform: translateX(-50%);
+}
+.flash-message {
+    margin: 0;
+    padding: 14px 20px;
+    border: 1px solid #b9dfc4;
+    border-radius: 10px;
+    background: #f0fff4;
+    color: #225c36;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    animation: flash-message 3.5s ease forwards;
+}
+@keyframes flash-message {
+    0%, 80% { opacity: 1; visibility: visible; }
+    100% { opacity: 0; visibility: hidden; }
+}
+
 /* Navigation bar */
 .gingham-bar {
     display: flex;

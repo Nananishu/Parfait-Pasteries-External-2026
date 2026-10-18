@@ -5,6 +5,19 @@ import app as bakery_app
 from app import app, initialise_database
 
 
+def test_add_to_cart_shows_flash_message():
+    client = app.test_client()
+
+    response = client.post(
+        '/add_to_cart',
+        data={'pastry': 'Custard Pudding parfait'},
+        follow_redirects=True,
+    )
+
+    assert response.status_code == 200
+    assert b'Added Custard Pudding parfait to your cart!' in response.data
+
+
 def test_checkout_creates_order_record(tmp_path, monkeypatch):
     db_path = tmp_path / 'bakery.db'
     invoices_dir = tmp_path / 'invoices'

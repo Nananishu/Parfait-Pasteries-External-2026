@@ -55,6 +55,16 @@
     </div>
 </header>
 
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="flash-messages" role="status" aria-live="polite">
+    {% for message in messages %}
+    <p class="flash-message">{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
 <main>
     {% block content %}{% endblock %}
 </main>

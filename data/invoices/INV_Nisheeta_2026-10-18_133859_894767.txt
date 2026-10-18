@@ -1,0 +1,16 @@
+Date: 2026-10-18 13:38:59
+Invoice Number: INV_Nisheeta_2026-10-18_133859_894767
+Customer: Nisheeta
+
+Parfait Pasteries
+--------------------------------------------------
+
+Items:
+  Sleepy Bear Pineberry Tart: 1 x $11.80 = $11.80
+
+Add-ons:
+  Berry Bliss Tea: 1 x $8.00 = $8.00
+  Peaches and Cream Infusion: 1 x $10.50 = $10.50
+
+Subtotal: $30.30
+Total: $21.21

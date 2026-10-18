@@ -1,0 +1,16 @@
+Date: 2026-10-18 13:34:54
+Invoice Number: INV_Steve_2026-10-18_133454_0B3999
+Customer: Steve
+
+Parfait Pasteries
+--------------------------------------------------
+
+Items:
+  Starlight Berry Yogurt Bowl: 1 x $12.50 = $12.50
+
+Add-ons:
+  Berry Bliss Tea: 1 x $8.00 = $8.00
+  Garden Bouquet: 1 x $28.00 = $28.00
+
+Subtotal: $48.50
+Total: $33.95

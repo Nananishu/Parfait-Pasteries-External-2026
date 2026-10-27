@@ -6,6 +6,7 @@ from app import app, initialise_database
 
 
 def test_add_to_cart_shows_flash_message():
+    """Check that adding a pastry shows a confirmation message."""
     client = app.test_client()
 
     response = client.post(
@@ -19,6 +20,7 @@ def test_add_to_cart_shows_flash_message():
 
 
 def test_checkout_creates_order_record(tmp_path, monkeypatch):
+    """Check that checkout saves an order and creates its invoice file."""
     db_path = tmp_path / 'bakery.db'
     invoices_dir = tmp_path / 'invoices'
     monkeypatch.setattr(bakery_app, 'DB_PATH', db_path)
@@ -64,6 +66,7 @@ def test_checkout_creates_order_record(tmp_path, monkeypatch):
 
 
 def test_initialise_database_migrates_legacy_orders_once(tmp_path, monkeypatch):
+    """Check that old orders are copied once without creating duplicates."""
     db_path = tmp_path / 'bakery.db'
     legacy_db_path = tmp_path / 'data' / 'bakery.db'
     legacy_db_path.parent.mkdir()

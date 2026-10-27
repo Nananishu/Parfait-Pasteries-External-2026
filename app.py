@@ -24,6 +24,7 @@ app.secret_key = 'parfait_pastries_secret'
 
 # This function makes sure the database and invoice folder exist before the app uses them.
 def initialise_database():
+    """Set up the orders table and migrate any older saved orders."""
     INVOICES_DIR.mkdir(parents=True, exist_ok=True)
     with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         cursor = conn.cursor()
@@ -66,6 +67,7 @@ def initialise_database():
 
 
 def migrate_legacy_orders(cursor):
+    """Copy orders from the older database when it is available."""
     if not LEGACY_DB_PATH.is_file() or LEGACY_DB_PATH.resolve() == DB_PATH.resolve():
         return
 
@@ -120,6 +122,7 @@ initialise_database()
 
 # This loads the bakery menu and add-on list from JSON files.
 def load_data():
+    """Load the pastry and add-on lists from their JSON files."""
     with (DATA_DIR / 'pasteries.json').open(encoding='utf-8') as file:
         pastries = json.load(file)
     with (DATA_DIR / 'addons.json').open(encoding='utf-8') as file:
@@ -129,6 +132,7 @@ def load_data():
 
 # This adds up the cart price and applies the 30% discount if something was ordered.
 def calculate_total(cart, selected_addons=None):
+    """Calculate the cart total after the 30% discount and report if it applied."""
     total = sum(item['price'] * item['quantity'] for item in cart.values())
     if selected_addons:
         total += sum(selected_addons.values())
@@ -143,6 +147,7 @@ def calculate_total(cart, selected_addons=None):
 # This is the home page. It loads the products and shows the cart total at the top.
 @app.route('/')
 def index():
+    """Show the home page with the menu and the current cart total."""
     cart = session.get('cart', {})
     selected_addons = session.get('selected_addons', {})
     pastries, addons = load_data()
@@ -161,6 +166,7 @@ def index():
 # This page shows the add-ons section and keeps the same cart and total logic.
 @app.route('/addons')
 def addons_page():
+    """Show the add-ons page with the current cart and total."""
     cart = session.get('cart', {})
     selected_addons = session.get('selected_addons', {})
     pastries, addons = load_data()
@@ -179,6 +185,7 @@ def addons_page():
 # This page displays the shop's best sellers.
 @app.route('/best-sellers')
 def best_sellers_page():
+    """Show the shop's best-selling pastries."""
     cart = session.get('cart', {})
     pastries, addons = load_data()
     total, discount_applied = calculate_total(cart, {})
@@ -195,6 +202,7 @@ def best_sellers_page():
 # This page lets customers leave feedback and store their rating and comments.
 @app.route('/feedback', methods=['GET', 'POST'])
 def feedback_page():
+    """Show the feedback form or display the customer's submitted feedback."""
     cart = session.get('cart', {})
     pastries, addons = load_data()
     total, discount_applied = calculate_total(cart, {})
@@ -232,6 +240,7 @@ def feedback_page():
 # This route adds a pastry or add-on to the shopping cart.
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
+    """Add one pastry or add-on to the customer's cart."""
     pastry = request.form['pastry']
     pastries, addons = load_data()
     cart = session.get('cart', {})
@@ -257,6 +266,7 @@ def add_to_cart():
 # This removes one item from the cart completely.
 @app.route('/remove_from_cart/<item>')
 def remove_from_cart(item):
+    """Remove an item from the cart and return to the add-ons page."""
     cart = session.get('cart', {})
     if item in cart:
         del cart[item]
@@ -268,6 +278,7 @@ def remove_from_cart(item):
 # This finalizes the order, saves it to the database, and creates a text invoice.
 @app.route('/checkout', methods=['POST'])
 def checkout():
+    """Save the customer's order, create an invoice, and clear the cart."""
     cart = session.get('cart', {})
     if not cart:
         flash('Your cart is empty.')
@@ -364,6 +375,7 @@ def checkout():
 # This shows all saved orders from the database in date order.
 @app.route('/order_history')
 def order_history_page():
+    """Show saved orders, with the newest order listed first."""
     with closing(sqlite3.connect(DB_PATH)) as conn:
         conn.row_factory = sqlite3.Row
         orders = conn.execute(

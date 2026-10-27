@@ -1,3 +1,5 @@
+"""Run a checkout example and print the saved order details."""
+
 import sqlite3
 import tempfile
 from pathlib import Path
@@ -35,7 +37,11 @@ with tempfile.TemporaryDirectory() as temp_dir:
     print('LOCATION', response.headers.get('Location'))
     with sqlite3.connect(bakery_app.DB_PATH) as conn:
         row = conn.execute(
-            'SELECT customer_name, items, total FROM orders WHERE customer_name = ?',
+            '''
+            SELECT customer_name, items, total
+            FROM orders
+            WHERE customer_name = ?
+            ''',
             ('Aisha',),
         ).fetchone()
     print('ROW', row)

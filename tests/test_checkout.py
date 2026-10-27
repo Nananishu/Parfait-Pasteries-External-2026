@@ -1,3 +1,5 @@
+"""Tests for cart checkout and migrating saved orders."""
+
 import sqlite3
 from contextlib import closing
 
@@ -52,7 +54,11 @@ def test_checkout_creates_order_record(tmp_path, monkeypatch):
 
     with closing(sqlite3.connect(db_path)) as conn, conn:
         row = conn.execute(
-            'SELECT invoice_number, customer_name, customer_email, items, total FROM orders WHERE customer_name = ?',
+            '''
+            SELECT invoice_number, customer_name, customer_email, items, total
+            FROM orders
+            WHERE customer_name = ?
+            ''',
             ('Aisha',),
         ).fetchone()
 
@@ -65,7 +71,9 @@ def test_checkout_creates_order_record(tmp_path, monkeypatch):
     assert (invoices_dir / f'{row[0]}.txt').is_file()
 
 
-def test_initialise_database_migrates_legacy_orders_once(tmp_path, monkeypatch):
+def test_initialise_database_migrates_legacy_orders_once(
+    tmp_path, monkeypatch
+):
     """Check that old orders are copied once without creating duplicates."""
     db_path = tmp_path / 'bakery.db'
     legacy_db_path = tmp_path / 'data' / 'bakery.db'
@@ -86,7 +94,9 @@ def test_initialise_database_migrates_legacy_orders_once(tmp_path, monkeypatch):
         )
         conn.execute(
             '''
-            INSERT INTO orders (invoice_number, customer_name, items, addons, total, date)
+            INSERT INTO orders (
+                invoice_number, customer_name, items, addons, total, date
+            )
             VALUES (?, ?, ?, ?, ?, ?)
             ''',
             (

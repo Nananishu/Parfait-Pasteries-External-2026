@@ -1,3 +1,5 @@
+"""Run the bakery website and manage its menu, cart, and orders."""
+
 import json
 import sqlite3
 import uuid
@@ -5,7 +7,15 @@ from contextlib import closing
 from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import (
+    Flask,
+    flash,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
 
 # This file sets up the bakery website and connects it to the database.
 # It stores orders, loads menu items, and handles the shopping cart.
@@ -22,7 +32,8 @@ app = Flask(__name__, static_folder='static', static_url_path='/static')
 app.secret_key = 'parfait_pastries_secret'
 
 
-# This function makes sure the database and invoice folder exist before the app uses them.
+# This function makes sure the database and invoice folder exist before the
+# app uses them.
 def initialise_database():
     """Set up the orders table and migrate any older saved orders."""
     INVOICES_DIR.mkdir(parents=True, exist_ok=True)
@@ -45,12 +56,19 @@ def initialise_database():
             '''
         )
 
-        # If older databases were created without some columns, this adds them in.
+        # If older databases were created without some columns, this adds them
+        # in.
         existing_columns = [
-            row[1] for row in cursor.execute('PRAGMA table_info(orders)').fetchall()
+            row[1]
+            for row in cursor.execute('PRAGMA table_info(orders)').fetchall()
         ]
 
-        for column_name in ['customer_email', 'customer_phone', 'delivery_address', 'addons']:
+        for column_name in [
+            'customer_email',
+            'customer_phone',
+            'delivery_address',
+            'addons',
+        ]:
             if column_name not in existing_columns:
                 cursor.execute(
                     f'ALTER TABLE orders ADD COLUMN {column_name} TEXT'
@@ -68,26 +86,40 @@ def initialise_database():
 
 def migrate_legacy_orders(cursor):
     """Copy orders from the older database when it is available."""
-    if not LEGACY_DB_PATH.is_file() or LEGACY_DB_PATH.resolve() == DB_PATH.resolve():
+    if (
+        not LEGACY_DB_PATH.is_file()
+        or LEGACY_DB_PATH.resolve() == DB_PATH.resolve()
+    ):
         return
 
     legacy_uri = f'{LEGACY_DB_PATH.resolve().as_uri()}?mode=ro'
     with closing(sqlite3.connect(legacy_uri, uri=True)) as legacy_conn:
         legacy_tables = legacy_conn.execute(
-            "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'orders'"
+            """
+            SELECT name
+            FROM sqlite_master
+            WHERE type = 'table' AND name = 'orders'
+            """
         ).fetchone()
         if legacy_tables is None:
             return
 
         legacy_conn.row_factory = sqlite3.Row
         legacy_columns = {
-            row['name'] for row in legacy_conn.execute('PRAGMA table_info(orders)')
+            row['name']
+            for row in legacy_conn.execute('PRAGMA table_info(orders)')
         }
-        required_columns = {'invoice_number', 'customer_name', 'items', 'total'}
+        required_columns = {
+            'invoice_number',
+            'customer_name',
+            'items',
+            'total',
+        }
         missing_columns = required_columns - legacy_columns
         if missing_columns:
             raise sqlite3.DatabaseError(
-                f'Cannot migrate legacy orders; missing columns: {sorted(missing_columns)}'
+                'Cannot migrate legacy orders; missing columns: '
+                f'{sorted(missing_columns)}'
             )
 
         target_columns = (
@@ -112,7 +144,10 @@ def migrate_legacy_orders(cursor):
             VALUES ({placeholders})
             ON CONFLICT(invoice_number) DO NOTHING
             ''',
-            tuple(row[column] if column in legacy_columns else None for column in target_columns),
+            tuple(
+                row[column] if column in legacy_columns else None
+                for column in target_columns
+            ),
         )
 
 
@@ -130,9 +165,10 @@ def load_data():
     return pastries, addons
 
 
-# This adds up the cart price and applies the 30% discount if something was ordered.
+# This adds up the cart price and applies the 30% discount if something was
+# ordered.
 def calculate_total(cart, selected_addons=None):
-    """Calculate the cart total after the 30% discount and report if it applied."""
+    """Calculate the discounted cart total and say if the discount applied."""
     total = sum(item['price'] * item['quantity'] for item in cart.values())
     if selected_addons:
         total += sum(selected_addons.values())
@@ -144,7 +180,8 @@ def calculate_total(cart, selected_addons=None):
     return round(total, 2), discount_applied
 
 
-# This is the home page. It loads the products and shows the cart total at the top.
+# This is the home page. It loads the products and shows the cart total at the
+# top.
 @app.route('/')
 def index():
     """Show the home page with the menu and the current cart total."""
@@ -251,7 +288,8 @@ def add_to_cart():
         flash(f'Item "{pastry}" was not found.')
         return redirect(url_for('addons_page'))
 
-    # If the item is already in the cart, increase the quantity. Otherwise, add it fresh.
+    # If the item is already in the cart, increase the quantity. Otherwise,
+    # add it fresh.
     if pastry in cart:
         cart[pastry]['quantity'] += 1
     else:
@@ -275,32 +313,45 @@ def remove_from_cart(item):
     return redirect(url_for('addons_page'))
 
 
-# This finalizes the order, saves it to the database, and creates a text invoice.
+# This finalizes the order, saves it to the database, and creates a text
+# invoice.
 @app.route('/checkout', methods=['POST'])
 def checkout():
-    """Save the customer's order, create an invoice, and clear the cart."""
+    """Save the order, create an invoice, and clear the cart."""
     cart = session.get('cart', {})
     if not cart:
         flash('Your cart is empty.')
         return redirect(url_for('addons_page'))
 
     # These lines collect the customer details from the checkout form.
-    customer_name = request.form.get('customer_name', '').strip() or 'Walk-in Customer'
+    customer_name = (
+        request.form.get('customer_name', '').strip() or 'Walk-in Customer'
+    )
     customer_email = request.form.get('customer_email', '').strip()
     customer_phone = request.form.get('customer_phone', '').strip()
     delivery_address = request.form.get('delivery_address', '').strip()
     pastries, addon_catalogue = load_data()
 
     # Split items into pastries and add-ons so the invoice looks clean.
-    items = {name: details for name, details in cart.items() if name in pastries}
-    addons = {name: details for name, details in cart.items() if name in addon_catalogue}
+    items = {
+        name: details
+        for name, details in cart.items()
+        if name in pastries
+    }
+    addons = {
+        name: details
+        for name, details in cart.items()
+        if name in addon_catalogue
+    }
     subtotal = sum(item['price'] * item['quantity'] for item in cart.values())
     total, _ = calculate_total(cart, {})
     timestamp = datetime.now()
 
     # This makes a simple invoice name using the customer's name.
     customer_slug = ''.join(
-        character for character in customer_name if character.isalnum() or character == '_'
+        character
+        for character in customer_name
+        if character.isalnum() or character == '_'
     ) or 'Customer'
     invoice_number = (
         f'INV_{customer_slug}_{timestamp.strftime("%Y-%m-%d_%H%M%S")}_'
@@ -343,7 +394,8 @@ def checkout():
     for name, item in items.items():
         line_total = item['price'] * item['quantity']
         invoice_lines.append(
-            f'  {name}: {item["quantity"]} x ${item["price"]:.2f} = ${line_total:.2f}'
+            f'  {name}: {item["quantity"]} x '
+            f'${item["price"]:.2f} = ${line_total:.2f}'
         )
 
     invoice_lines.extend(['', 'Add-ons:'])
@@ -351,7 +403,8 @@ def checkout():
         for name, item in addons.items():
             line_total = item['price'] * item['quantity']
             invoice_lines.append(
-                f'  {name}: {item["quantity"]} x ${item["price"]:.2f} = ${line_total:.2f}'
+                f'  {name}: {item["quantity"]} x '
+                f'${item["price"]:.2f} = ${line_total:.2f}'
             )
     else:
         invoice_lines.append('  None')
@@ -368,7 +421,10 @@ def checkout():
     # Clear the cart after a successful purchase.
     session.pop('cart', None)
     session.modified = True
-    flash(f'Purchase saved. Invoice {invoice_number} was saved to data/invoices.')
+    flash(
+        f'Purchase saved. Invoice {invoice_number} was saved to '
+        'data/invoices.'
+    )
     return redirect(url_for('addons_page'))
 
 
